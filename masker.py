@@ -9,8 +9,8 @@ import string
 
 def connect_db():
     db_name = os.getenv('COMPANY_NAME', 'apporbit')
-    user = os.getenv('DB_USER', 'odoo')
-    passwd = os.getenv('DB_PASSWORD', 'odoo')
+    user = os.getenv('POSTGRES_USER', 'odoo')
+    passwd = os.getenv('POSTGRES_PASSWORD', 'odoo')
     host = os.getenv('DB_TIER', 'ds2db')
 
     conn = psycopg2.connect("dbname='{0}' user='{1}' host='{2}' password='{3}'".format(db_name,

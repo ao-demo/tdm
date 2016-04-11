@@ -1,0 +1,37 @@
+version: "vdatamask"
+schemaVersion: v1
+app_id: Odoopublic
+tiers:
+  - name: ds2db
+    type: db
+    replicas: 1
+    containers:
+    - name: postgresdb
+      image: jkshah/postgres:9.4
+      environment:
+        - POSTGRES_USER: odoo
+          POSTGRES_PASSWORD: odoo
+      ports:
+         - containerPort: 5432
+      resources:
+        request:
+          min-cpus: 0.05
+          min-memory: 64M
+      volumes:
+        - containerVolume: "/var/lib/postgresql/data"
+          min-size: 1G
+  - name: ds2app
+    type: app
+    replicas: 1
+    containers:
+      - name: odoo
+        image: ao-admin/tdm:latest
+        environment:
+        - POSTGRES_USER: odoo
+          POSTGRES_PASSWORD: odoo
+        ports:
+           - containerPort: 5000
+             service: external
+             url:
+             - http://APPORBIT_SVC:APPORBIT_PORT
+
