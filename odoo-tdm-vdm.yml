@@ -1,4 +1,4 @@
-version: "v1"
+version: "v1dm"
 schemaVersion: v1
 app_id: OdooTDM
 tiers:
@@ -25,13 +25,13 @@ tiers:
   replicas: 1
   containers:
   - name: odoo
-    image: saji/odoo
+    image: ao-admin/tdm:latest
     environment:
     - POSTGRES_USER: odoo
       POSTGRES_PASSWORD: odoo
     ports:
-    - containerPort: 8069
+    - containerPort: 5000
       service: external
       url:
-      - http://APPORBIT_SVC:APPORBIT_PORT/
+      - http://APPORBIT_SVC:APPORBIT_PORT
 
