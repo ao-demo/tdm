@@ -25,7 +25,7 @@ tiers:
   replicas: 1
   containers:
   - name: odoo
-    image: ao-admin/tdm:latest
+    image: aoadmin/tdm:latest
     environment:
     - POSTGRES_USER: odoo
       POSTGRES_PASSWORD: odoo
