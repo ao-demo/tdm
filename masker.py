@@ -38,6 +38,15 @@ def update_passports(rows):
     conn.commit()
     cur.close()
 
+def update_work_phone(rows):
+    conn = connect_db()
+    cur = conn.cursor()
+    for row in rows:
+        if row[1]:
+            cur.execute("UPDATE hr_employee SET work_phone='{0}' WHERE id={1}".format(row[1], row[0]))
+    conn.commit()
+    cur.close()
+
 
 def update_bank_accounts(rows):
     conn = connect_db()
@@ -50,18 +59,25 @@ def update_bank_accounts(rows):
 
 
 def mask_passports():
-    rows = get_records("SELECT id, passport_id FROM hr_employee WHERE passport_id IS NULL OR  passport_id is NOT NULL")
+    rows = get_records("SELECT id, passport_id FROM hr_employee")
     print "Rows for passport are " + str(rows)
     for row in rows:
-        if row[1]:
-            row[1] =  ''.join(random.choice(string.digits) for _ in range(8))
+        row[1] = ''.join(random.choice(string.digits) for _ in range(8))
 
-    print "Passport rows after masking " + str(rows)
+    print "Passports rows after masking " + str(rows)
     update_passports(rows)
 
+def mask_work_phone():
+    rows = get_records("SELECT id, work_phone FROM hr_employee")
+    print "Rows for workphone are " + str(rows)
+    for row in rows:
+        row[1] =  '+' + ''.join(random.choice(string.digits) for _ in range(8))
+
+    print "work_phone rows after masking " + str(rows)
+    update_work_phone(rows)
 
 def mask_bank_account():
-    rows = get_records("SELECT id, acc_number FROM res_partner_bank WHERE acc_number IS NULL OR  acc_number is NOT NULL")
+    rows = get_records("SELECT id, acc_number FROM res_partner_bank ")
     print "Rows for bank accounts are " + str(rows)
     for row in rows:
         if row[1]:
@@ -74,6 +90,7 @@ def mask_bank_account():
 def mask_data():
     try:
         mask_passports()
+        mask_work_phone()
         mask_bank_account()
 
         with open("/tmp/result", 'w') as outf:
